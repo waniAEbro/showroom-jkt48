@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img class="rounded-start" src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" alt="Foto Member" id="photo">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">Member</h5>
+                    <div class="card-text description"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let member = undefined;
+    const id = "<%- member %>";
+
+    const getMember = async () => {
+        member = await fetch("https://www.showroom-live.com/api/room/profile?room_id=" + id).then(respond => respond.json())
+
+        console.log(member)
+
+        document.getElementById("photo").src = member.image
+        document.querySelector(".card-title").innerHTML = member.main_name
+        document.querySelector(".description").innerHTML = member.description
+    }
+
+    getMember()
+</script>
