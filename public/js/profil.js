@@ -8,8 +8,7 @@ const Lagi_live = () => {
 
     id_profil.forEach(async id => {
         try {
-            member = await fetch("https://www.showroom-live.com/api/room/profile?room_id=" + id).then(response => response.json());
-            console.log(member);
+            member = await fetch("http://localhost:3000/" + id).then(response => response.json());
         } catch (error) {
             console.log(error)
         }
@@ -68,7 +67,7 @@ const buatCard = (member) => {
 
 id_profil.forEach(async id => {
     try {
-        member = await fetch("https://www.showroom-live.com/api/room/profile?room_id=" + id).then(response => response.json());
+        member = await fetch("http://localhost:3000/" + id).then(response => response.json());
     } catch (error) {
         console.log(error);
     }
