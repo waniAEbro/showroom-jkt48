@@ -18,7 +18,16 @@ const port = 3000;
 const server = http.createServer(app);
 const io = new Server(server);
 
-const client = new Client();
+const client = new Client({
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+        ]
+    }
+});
 
 app.set("view engine", "ejs");
 
