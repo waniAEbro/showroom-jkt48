@@ -1,31 +1,10 @@
 const express = require("express");
 const layouts = require("express-ejs-layouts");
 const methodOverride = require("method-override");
-const http = require("http");
 const https = require("https");
-const { Server } = require("socket.io");
-const {
-    Client,
-    LocalAuth
-} = require('whatsapp-web.js');
-const qrcode = require('qrcode');
-const { resolve } = require("path");
 
 const app = express();
 const port = 3000;
-const server = http.createServer(app);
-const io = new Server(server);
-
-const client = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        headless: true,
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-        ]
-    }
-});
 
 app.set("view engine", "ejs");
 
@@ -59,42 +38,30 @@ app.get("/:id", (req, res) => {
         response.on("end", () => {
             res.send(JSON.parse(respond));
         })
+    }).on("error", (error) => {
+        console.log(error)
     });
 })
 
-io.on("connection", (socket) => {
-    socket.emit("message", "Loading ... ")
-
-    client.on("qr", qr => {
-        qrcode.toDataURL(qr, (error, url) => {
-            socket.emit("qr", url);
-            socket.emit("message", "Silakan Scan QR Code")
+app.get("/live/:id", (req, res) => {
+    https.get("https://www.showroom-live.com/api/live/streaming_url?room_id=" + req.params.id, (response) => {
+        let respond = "";
+        response.on("data", data => {
+            respond += data;
         })
-    })
 
-    client.on('authenticated', () => {
-        socket.emit("qr", "https://media.istockphoto.com/id/1212568100/vector/happy-young-employees-giving-support-and-help-each-other.jpg?b=1&s=612x612&w=0&k=20&c=0sFel4HwLblL03lIAN1zL2_RopW3zpZCvdI6pBzI7y0=")
-        socket.emit("message", "Whatsapp Siap Digunakan");
+        response.on("end", () => {
+            res.send(JSON.parse(respond));
+        })
+    }).on("error", error => {
+        console.log(error);
     });
-
-    client.on('ready', () => {
-        socket.emit("qr", "https://media.istockphoto.com/id/1212568100/vector/happy-young-employees-giving-support-and-help-each-other.jpg?b=1&s=612x612&w=0&k=20&c=0sFel4HwLblL03lIAN1zL2_RopW3zpZCvdI6pBzI7y0=")
-        socket.emit("message", "Whatsapp Siap Digunakan")
-    });
-
-    client.on('disconnected', (reason) => {
-        socket.emit("message", reason);
-    });
-});
-
-client.on("message", async message => {
-    if (message.body) {
-        message.reply(message.from);
-    }
 })
 
-client.initialize();
+app.get("/member/:id", (req, res) => {
+    res.render("detail", { layout: "layouts/main", title: "Detail", id: req.params.id });
+})
 
-server.listen(port, () => {
+app.listen(port, () => {
     console.log(`anda terhubung dengan port : ${port}`);
 });
