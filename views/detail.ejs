@@ -26,9 +26,9 @@
     let video = document.getElementById("video");
     const id = "<%= id %>";
 
-    fetch("http://localhost:3000/" + id).then(respond => respond.json()).then(data => {
+    fetch(window.location.origin + "/" + id).then(respond => respond.json()).then(data => {
         if (data.is_onlive) {
-            fetch("http://localhost:3000/live/" + data.room_id).then(response => response.json()).then(data => {
+            fetch(window.location.origin + "/live/" + data.room_id).then(response => response.json()).then(data => {
                 console.log(data);
                 video.src = data.streaming_url_list[0].url;
                 var player = videojs('example-video', {
