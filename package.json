@@ -15,6 +15,9 @@
     "express-ejs-layouts": "^2.5.1",
     "method-override": "^3.0.0",
     "mongoose": "^6.7.2",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "qrcode": "^1.5.1",
+    "socket.io": "^4.5.4",
+    "whatsapp-web.js": "^1.18.4"
   }
 }

@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-4">
+            <div class="card">
+                <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" id="qrcode" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5>Status</h5>
+                    <p class="card-text" id="status"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js" integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    const socket = io();
+
+    socket.on("status", status => {
+        document.getElementById("status").innerHTML = status;
+    })
+
+    socket.on("qr", qr => {
+        document.getElementById("qrcode").src = qr;
+    });
+</script>

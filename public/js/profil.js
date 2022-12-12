@@ -3,13 +3,10 @@ const lagi_live = document.querySelector(".lagi_live");
 let col = card = title = card_body = img = undefined;
 let id_profil = [318209, 318118, 318204, 318117, 318207, 400713, 318120, 400717, 318208, 317727, 318112, 317738, 318232, 318222, 318219, 400712, 400716, 400710, 318218, 400715, 318210, 400718, 318227, 318225, 318228, 318224, 317739, 400714, 318230, 318223, 318233, 318229];
 
-console.log(window.location.href);
-
 const Lagi_live = () => {
     id_profil.forEach(id => {
         try {
-
-            fetch(window.location.origin + "/" + id).then(response => response.json()).then(data => {
+            fetch(window.location.origin + "/api/" + id).then(response => response.json()).then(data => {
                 if (data.is_onlive) {
                     id_profil = id_profil.filter(id => id != data.room_id);
                     col = buatCard(data);
@@ -71,7 +68,7 @@ const buatCard = (member) => {
 
 id_profil.forEach(id => {
     try {
-        fetch(window.location.origin + "/" + id).then(response => response.json()).then(data => {
+        fetch(window.location.origin + "/api/" + id).then(response => response.json()).then(data => {
             col = buatCard(data);
             profil.appendChild(col);
         });

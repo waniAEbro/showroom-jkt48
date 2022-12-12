@@ -26,7 +26,7 @@
     let video = document.getElementById("video");
     const id = "<%= id %>";
 
-    fetch(window.location.origin + "/" + id).then(respond => respond.json()).then(data => {
+    fetch(window.location.origin + "/api/" + id).then(respond => respond.json()).then(data => {
         if (data.is_onlive) {
             fetch(window.location.origin + "/live/" + data.room_id).then(response => response.json()).then(data => {
                 console.log(data);
