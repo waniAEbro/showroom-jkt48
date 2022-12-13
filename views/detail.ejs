@@ -1,11 +1,11 @@
 <div class="container">
     <div class="row justify-content-center mb-3">
-        <div class="col-6">
-            <div class="card mb-3">
-                <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" class="img-fluid rounded-start" id="photo" alt="foto member">
+        <div class="col-lg-6">
+            <div class="card">
+                <img src="<%= member.info.image %> " class="img-fluid rounded-start" alt="<%= "foto " + member.info.main_name %> ">
                 <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <p class="card-text"><small class="text-muted description">Last updated 3 mins ago</small></p>
+                    <h5 class="card-title"><%= member.info.main_name %> </h5>
+                    <p class="card-text" style="white-space: pre-wrap"><%- member.info.description.slice(1, -1) %> </p>
                 </div>
             </div>
         </div>
@@ -23,21 +23,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.0.0-1/video.js" integrity="sha512-o///l2FBgUXBQgnlufCyebrYBqMOtTgu+wWPGAZf3sxzDWzziM37ZlXEisAT1oRCn5Bk6UP+edFRPX38id4tlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/@videojs/http-streaming@3.0.0-2/dist/videojs-http-streaming.cjs.min.js"></script>
 <script>
-    let video = document.getElementById("video");
-    const id = "<%= id %>";
+    let live = JSON.parse("<%= member.info.is_onlive %>");
+    let id = JSON.parse("<%= member.info.room_id %>");
 
-    fetch(window.location.origin + "/api/" + id).then(respond => respond.json()).then(data => {
-        if (data.is_onlive) {
-            fetch(window.location.origin + "/live/" + data.room_id).then(response => response.json()).then(data => {
-                console.log(data);
-                video.src = data.streaming_url_list[0].url;
-                var player = videojs('example-video', {
-                    autoplay: true
-                });
+    if (live) {
+        fetch(window.location.origin + "/member/live/" + data.room_id).then(response => response.json()).then(data => {
+            video.src = data.streaming_url_list[0].url;
+            var player = videojs('example-video', {
+                autoplay: true
             });
-        }
-        document.getElementById("photo").src = data.image
-        document.querySelector(".card-title").innerHTML = data.main_name
-        document.querySelector(".description").innerHTML = data.description
-    })
+        });
+    }
 </script>

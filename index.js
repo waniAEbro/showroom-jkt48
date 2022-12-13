@@ -1,11 +1,16 @@
 const express = require("express");
 const layouts = require("express-ejs-layouts");
 const methodOverride = require("method-override");
-const https = require("https");
 const http = require("http");
+const https = require("https");
 const Socket = require("socket.io");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode");
+const MemberRoutes = require("./routes/MemberRoutes.js");
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48");
+const Member = require("./models/member.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -30,51 +35,61 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 app.get("/", (req, res) => {
-    res.render("index", { layout: "layouts/main", title: "Home" });
+    res.redirect("/member");
 });
 
-app.get("/live/:id", (req, res) => {
-    https.get("https://www.showroom-live.com/api/live/streaming_url?room_id=" + req.params.id, (response) => {
-        let respond = "";
-        response.on("data", data => {
-            respond += data;
-        })
-
-        response.on("end", () => {
-            res.send(JSON.parse(respond));
-        })
-    }).on("error", error => {
-        console.log(error);
-    });
-});
-
-app.get("/member/:id", (req, res) => {
-    res.render("detail", { layout: "layouts/main", title: "Detail", id: req.params.id });
-});
-
-app.get("/api/:id", (req, res) => {
-    https.get("https://www.showroom-live.com/api/room/profile?room_id=" + req.params.id, (response) => {
-        let respond = "";
-        response.on("data", data => {
-            respond += data;
-        })
-
-        response.on("end", () => {
-            res.send(JSON.parse(respond));
-        })
-    }).on("error", (error) => {
-        console.log(error)
-    });
-});
+app.use("/member", MemberRoutes);
 
 app.get("/whatsapp", (req, res) => {
     res.render("whatsapp", { layout: "layouts/main", title: "Whatsapp" });
 });
 
 app.use("/", (req, res) => {
-    console.log("routenya ga ada nih");
-    res.send("halaman tidak ditemukan");
+    res.status(404).render("404", { layout: "layouts/main", title: "404" });
 });
+
+const checkLive = () => {
+    Member.find().then(data => {
+        data.forEach(member => {
+            https.get("https://www.showroom-live.com/api/room/profile?room_id=" + member.info.room_id, (response) => {
+                let respond = "";
+
+                response.on("data", data => {
+                    respond += data;
+                })
+
+                response.on("end", () => {
+                    respond = JSON.parse(respond);
+
+                    if (respond.is_onlive) {
+                        Member.findByIdAndUpdate(member._id, {
+                            info: {
+                                is_onlive: true,
+                            }
+                        });
+
+                        if (!member.is_notified) {
+                            client.sendMessage("+6285900221521@c.us", `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton`).then(() => {
+                                Member.findByIdAndUpdate(member._id, {
+                                    is_notified: true
+                                })
+                            });
+                        }
+                    } else {
+                        Member.findByIdAndUpdate(member._id, {
+                            is_notified: false,
+                            info: {
+                                is_onlive: false,
+                            }
+                        })
+                    }
+                })
+            });
+        });
+    })
+};
+
+setInterval(checkLive, 60000);
 
 client.initialize();
 
@@ -94,10 +109,6 @@ io.on("connection", (socket) => {
         socket.emit("status", "whatsapp siap untuk digunakan");
     })
 });
-
-client.on("message", async (msg) => {
-    msg.reply(msg.body);
-})
 
 server.listen(port, () => {
     console.log(`anda terhubung dengan port : ${port}`);

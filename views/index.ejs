@@ -8,7 +8,17 @@
     <section class="mb-3">
         <h5>List Member</h5>
         <div class="row profil">
+            <% members.forEach(member => { %>
+            <div class="col-lg-4 mb-3">
+                <div class="card">
+                    <img src="<%= member.info.image %> " class="card-img-top" alt="<%= "foto " + member.info.main_name %> ">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= member.info.main_name %> </h5>
+                        <a href="<%= "/member/" + member._id %>" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
         </div>
     </section>
 </div>
-<script src="js/profil.js"></script>
