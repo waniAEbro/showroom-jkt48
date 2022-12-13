@@ -63,9 +63,7 @@ const checkLive = () => {
 
                     if (respond.is_onlive) {
                         Member.findByIdAndUpdate(member._id, {
-                            info: {
-                                is_onlive: true,
-                            }
+                            "info.is_onlive": true,
                         }).catch(error => console.log(error));
 
                         if (!member.is_notified) {
@@ -78,9 +76,7 @@ const checkLive = () => {
                     } else {
                         Member.findByIdAndUpdate(member._id, {
                             is_notified: false,
-                            info: {
-                                is_onlive: false,
-                            }
+                            "info.is_onlive": false,
                         }).catch(error => console.log(error))
                     }
                 })
