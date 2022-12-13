@@ -112,6 +112,10 @@ io.on("connection", (socket) => {
     })
 });
 
+client.on("message", async message => {
+    message.reply(message.body);
+});
+
 server.listen(port, () => {
     console.log(`anda terhubung dengan port : ${port}`);
 });
