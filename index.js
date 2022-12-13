@@ -66,14 +66,14 @@ const checkLive = () => {
                             info: {
                                 is_onlive: true,
                             }
-                        });
+                        }).catch(error => console.log(error));
 
                         if (!member.is_notified) {
                             client.sendMessage("+6285900221521@c.us", `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton`).then(() => {
                                 Member.findByIdAndUpdate(member._id, {
                                     is_notified: true
-                                })
-                            });
+                                }).catch(error => console.log(error));
+                            }).catch(error => console.log(error));
                         }
                     } else {
                         Member.findByIdAndUpdate(member._id, {
@@ -81,9 +81,11 @@ const checkLive = () => {
                             info: {
                                 is_onlive: false,
                             }
-                        })
+                        }).catch(error => console.log(error))
                     }
                 })
+            }).on(error => {
+                console.log(error);
             });
         });
     })
