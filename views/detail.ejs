@@ -27,7 +27,7 @@
     let id = JSON.parse("<%= member.info.room_id %>");
 
     if (live) {
-        fetch(window.location.origin + "/member/live/" + data.room_id).then(response => response.json()).then(data => {
+        fetch(window.location.origin + "/member/live/" + id).then(response => response.json()).then(data => {
             video.src = data.streaming_url_list[0].url;
             var player = videojs('example-video', {
                 autoplay: true

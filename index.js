@@ -67,7 +67,7 @@ const checkLive = () => {
                         }).catch(error => console.log(error));
 
                         if (!member.is_notified) {
-                            client.sendMessage("+6285900221521@c.us", `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton`).then(() => {
+                            client.sendMessage("6285900221521@c.us", `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton`).then(() => {
                                 Member.findByIdAndUpdate(member._id, {
                                     is_notified: true
                                 }).catch(error => console.log(error));
@@ -80,9 +80,7 @@ const checkLive = () => {
                         }).catch(error => console.log(error))
                     }
                 })
-            }).on(error => {
-                console.log(error);
-            });
+            }).on("error", error => console.log(error))
         });
     })
 };
@@ -109,7 +107,7 @@ io.on("connection", (socket) => {
 });
 
 client.on("message", async message => {
-    message.reply(message.body);
+    message.reply(message.from);
 });
 
 server.listen(port, () => {
