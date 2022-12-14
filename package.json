@@ -18,6 +18,7 @@
     "nodemon": "^2.0.20",
     "qrcode": "^1.5.1",
     "socket.io": "^4.5.4",
-    "whatsapp-web.js": "^1.18.4"
+    "whatsapp-web.js": "^1.18.4",
+    "wwebjs-mongo": "^1.1.0"
   }
 }
