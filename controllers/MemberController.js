@@ -3,7 +3,8 @@ const https = require("https");
 
 const index = (req, res) => {
     Member.find().then(members => {
-        res.render("index", { layout: "layouts/main", title: "Home", members });
+        let lives = members.filter(member => member.info.is_onlive);
+        res.render("index", { layout: "layouts/main", title: "Home", members, lives });
     });
 };
 
