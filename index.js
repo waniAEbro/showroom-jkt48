@@ -9,6 +9,7 @@ const qrcode = require("qrcode");
 const MemberRoutes = require("./routes/MemberRoutes.js");
 const mongoose = require("mongoose");
 const { MongoStore } = require("wwebjs-mongo");
+const WhatsappRoutes = require("./routes/WhatsappRoutes.js");
 
 mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
     const store = new MongoStore({ mongoose });
@@ -45,11 +46,15 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
                             }).catch(error => console.log(error));
 
                             if (!member.is_notified) {
-                                client.sendMessage("6285900221521@c.us", `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton`).then(() => {
-                                    Member.findByIdAndUpdate(member._id, {
-                                        is_notified: true
-                                    }).catch(error => console.log(error));
-                                }).catch(error => console.log(error));
+                                Whatsapp.find().then(whatsapps => {
+                                    whatsapps.forEach(whatsapp => {
+                                        client.sendMessage(whatsapp, `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton`).then(() => {
+                                            Member.findByIdAndUpdate(member._id, {
+                                                is_notified: true
+                                            }).catch(error => console.log(error));
+                                        }).catch(error => console.log(error));
+                                    })
+                                })
                             }
                         } else {
                             Member.findByIdAndUpdate(member._id, {
@@ -88,6 +93,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
 });
 
 const Member = require("./models/member.js");
+const Whatsapp = require("./models/whatsapp.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -110,9 +116,7 @@ app.get("/", (req, res) => {
 
 app.use("/member", MemberRoutes);
 
-app.get("/whatsapp", (req, res) => {
-    res.render("whatsapp", { layout: "layouts/main", title: "Whatsapp" });
-});
+app.use("/whatsapp", WhatsappRoutes);
 
 app.use("/", (req, res) => {
     res.status(404).render("404", { layout: "layouts/main", title: "404" });

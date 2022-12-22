@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">nomor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let number = 1; %>
+                    <% whatsapps.forEach(whatsapp => { %>
+                    <tr>
+                        <th scope="row"><%= number %></th>
+                        <td><%= whatsapp.nomor %></td>
+                    </tr>
+                    <% number++ %>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
