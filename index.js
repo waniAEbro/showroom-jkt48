@@ -88,7 +88,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
     });
 
     client.on("message", async message => {
-        message.reply(message.from);
+        message.reply("maaf, kami tidak bisa membalas pesan anda 🙏");
     });
 });
 
