@@ -48,7 +48,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
                             if (!member.is_notified) {
                                 Whatsapp.find().then(whatsapps => {
                                     whatsapps.forEach(whatsapp => {
-                                        client.sendMessage(whatsapp, `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton`).then(() => {
+                                        client.sendMessage(whatsapp.nomor, `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton`).then(() => {
                                             Member.findByIdAndUpdate(member._id, {
                                                 is_notified: true
                                             }).catch(error => console.log(error));
@@ -67,6 +67,12 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
             });
         })
     };
+
+    Whatsapp.find().then(whatsapps => {
+        whatsapps.forEach(whatsapp => {
+            console.log(whatsapp);
+        })
+    });
 
     setInterval(checkLive, 60000);
 
