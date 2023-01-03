@@ -10,6 +10,7 @@ const MemberRoutes = require("./routes/MemberRoutes.js");
 const mongoose = require("mongoose");
 const { MongoStore } = require("wwebjs-mongo");
 const WhatsappRoutes = require("./routes/WhatsappRoutes.js");
+const AuthRoutes = require("./routes/AuthRoutes.js");
 
 mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
     const store = new MongoStore({ mongoose });
@@ -68,12 +69,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
         })
     };
 
-    Whatsapp.find().then(whatsapps => {
-        whatsapps.forEach(whatsapp => {
-            console.log(whatsapp);
-        })
-    });
-
     setInterval(checkLive, 60000);
 
     io.on("connection", (socket) => {
@@ -100,6 +95,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
 
 const Member = require("./models/member.js");
 const Whatsapp = require("./models/whatsapp.js");
+const User = require("./models/user.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -119,6 +115,8 @@ app.use(methodOverride("_method"));
 app.get("/", (req, res) => {
     res.redirect("/member");
 });
+
+app.use(AuthRoutes);
 
 app.use("/member", MemberRoutes);
 

@@ -3,12 +3,12 @@ const WhatsappController = require("../controllers/WhatsappController");
 
 const router = express.Router();
 
-router.get("/", (req, res) => WhatsappController.index(req, res));
+router.get("/", WhatsappController.index);
 
-router.get("/create", (req, res) => WhatsappController.create(req, res));
+router.get("/create", WhatsappController.create);
 
-router.get("/scan", (req, res) => WhatsappController.scan(req, res));
+router.get("/scan", WhatsappController.scan);
 
-router.post("/", (req, res) => WhatsappController.store(req, res));
+router.post("/", WhatsappController.store);
 
 module.exports = router;

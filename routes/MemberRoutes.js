@@ -3,12 +3,12 @@ const MemberController = require("../controllers/MemberController");
 
 const router = express.Router();
 
-router.get("/", (req, res) => MemberController.index(req, res));
+router.get("/", MemberController.index);
 
-router.get("/live/:id", (req, res) => MemberController.getLive(req, res));
+router.get("/live/:id", MemberController.getLive);
 
-router.get("/update", (req, res) => MemberController.updateDatabase(req, res));
+router.get("/update", MemberController.updateDatabase);
 
-router.get("/:id", (req, res) => MemberController.show(req, res));
+router.get("/:id", MemberController.show);
 
 module.exports = router;
