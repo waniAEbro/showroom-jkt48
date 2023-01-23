@@ -1,9 +1,55 @@
 <div class="container">
-    <form action="/signup" method="post">
-        <label for="">Nama: </label>
-        <input type="text">
-        <label for="">Password</label>
-        <input type="password">
-        <button type="submit">Submit</button>
-    </form>
+    <div class="card">
+        <div class="card-body">
+            <div class="alert alert-danger mb-3 d-none"></div>
+            <form>
+                <div class="mb-3">
+                    <label class="form-label">Email: </label>
+                    <input type="email" name="email" required class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" required class="form-control">
+                </div>
+                <button type="submit" class="btn btn-info">Submit</button>
+            </form>
+        </div>
+    </div>
 </div>
+
+<script>
+    const form = document.querySelector("form");
+    const alert = document.querySelector(".alert")
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const email = form.email.value;
+        const password = form.password.value;
+
+        try {
+            const result = await fetch("/login", {
+                method: "POST",
+                body: JSON.stringify({
+                    email,
+                    password
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const data = await result.json();
+            if (data.error) {
+                alert.classList.remove("d-none");
+                alert.innerHTML = data.error;
+            } else {
+                alert.classList.add("d-none");
+            }
+            if (data.user) {
+                location.assign("/");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+</script>

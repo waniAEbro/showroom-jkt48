@@ -1,17 +1,23 @@
-<nav class="navbar navbar-expand-lg bg-light mb-4">
+<nav class="navbar navbar-dark navbar-expand-lg bg-dark mb-4">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Showroom JKT48</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link <% if (title == "Home") { %>
                     active
                     <% } %>" aria-current="page" href="/">Home</a>
                 </li>
             </ul>
+            <% if (user) { %>
+            <p class="nav-link me-3">Welcome <%= user.nama %> </p>
+            <a href="/logout" class="btn btn-danger">Log Out</a>
+            <% } else { %>
+            <a href="/login" class="nav-link me-3">Login</a>
+            <% } %>
         </div>
     </div>
 </nav>
