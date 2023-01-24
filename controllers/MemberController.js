@@ -45,33 +45,41 @@ const list = (req, res) => {
         });
 }
 
-const updateDatabase = (req, res) => {
-    let id_profil = [318239];
+const destroy = (req, res) => {
+    Member.deleteOne({ _id: req.params.id })
+        .then(() => {
+            res.redirect("/member/list");
+        })
+        .catch(error => { console.log(error) });
+}
 
-    id_profil.forEach(id => {
-        https.get("https://www.showroom-live.com/api/room/profile?room_id=" + id, (response) => {
-            let respond = "";
+const store = (req, res) => {
+    https.get("https://www.showroom-live.com/api/room/profile?room_id=" + req.body.id, (response) => {
+        let respond = "";
 
-            response.on("data", data => {
-                respond += data;
-            })
+        response.on("data", data => {
+            respond += data;
+        })
 
-            response.on("end", () => {
-                console.log(JSON.parse(respond))
+        response.on("end", () => {
+            if (!JSON.parse(respond).errors) {
                 const member = new Member({
                     info: JSON.parse(respond),
                     is_notified: false
                 })
 
                 member.save();
-            })
-        }).on("error", error => {
-            console.log(error);
-        });
+
+                res.status(201).json({ message: "successful!", error: "" });
+            } else {
+                res.status(400).json({ message: "error!", error: JSON.parse(respond).errors[0] });
+            }
+        })
+    }).on("error", error => {
+        res.status(400).json({ message: "error!", error });
     });
-    res.send("halo");
-};
+}
 
 module.exports = {
-    index, show, getLive, updateDatabase, list
+    index, show, getLive, list, destroy, store
 };

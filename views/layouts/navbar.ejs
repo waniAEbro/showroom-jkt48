@@ -13,7 +13,6 @@
                 </li>
             </ul>
             <% if (user) { %>
-            <p class="nav-link me-3">Welcome <%= user.nama %> </p>
             <a href="/logout" class="btn btn-danger">Log Out</a>
             <% } else { %>
             <a href="/login" class="nav-link me-3">Login</a>

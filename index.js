@@ -97,7 +97,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
 
 const Member = require("./models/member.js");
 const Whatsapp = require("./models/whatsapp.js");
-const User = require("./models/user.js");
 
 const app = express();
 const server = http.createServer(app);
