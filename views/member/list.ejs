@@ -5,15 +5,17 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">nomor</th>
+                        <th scope="col">room id</th>
+                        <th scope="col">nama</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% let number = 1; %>
-                    <% whatsapps.forEach(whatsapp => { %>
+                    <% members.forEach(member => { %>
                     <tr>
                         <th scope="row"><%= number %></th>
-                        <td><%= whatsapp.nomor %></td>
+                        <td><%= member.info.room_id %></td>
+                        <td><%= member.info.main_name %></td>
                     </tr>
                     <% number++ %>
                     <% }) %>
@@ -22,3 +24,7 @@
         </div>
     </div>
 </div>
+
+<script>
+    const members = JSON.parse("<%= members.info %>");
+</script>

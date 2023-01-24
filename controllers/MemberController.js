@@ -5,6 +5,8 @@ const index = (req, res) => {
     Member.find().then(members => {
         let lives = members.filter(member => member.info.is_onlive);
         res.render("member/index", { layout: "layouts/main", title: "Home", members, lives });
+    }).catch(error => {
+        console.log(error);
     });
 };
 
@@ -33,8 +35,18 @@ const getLive = (req, res) => {
     });
 };
 
+const list = (req, res) => {
+    Member.find()
+        .then(members => {
+            res.render("member/list", { layout: "layouts/main", title: "List", members })
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
 const updateDatabase = (req, res) => {
-    let id_profil = [130997];
+    let id_profil = [318239];
 
     id_profil.forEach(id => {
         https.get("https://www.showroom-live.com/api/room/profile?room_id=" + id, (response) => {
@@ -61,5 +73,5 @@ const updateDatabase = (req, res) => {
 };
 
 module.exports = {
-    index, show, getLive, updateDatabase
+    index, show, getLive, updateDatabase, list
 };

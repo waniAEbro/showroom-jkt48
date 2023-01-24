@@ -9,6 +9,8 @@ router.get("/live/:id", MemberController.getLive);
 
 router.get("/update", MemberController.updateDatabase);
 
+router.get("/list", MemberController.list);
+
 router.get("/:id", MemberController.show);
 
 module.exports = router;

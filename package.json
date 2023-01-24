@@ -17,12 +17,12 @@
     "express-ejs-layouts": "^2.5.1",
     "jsonwebtoken": "^9.0.0",
     "method-override": "^3.0.0",
-    "mongoose": "^6.7.2",
+    "mongoose": "^6.8.4",
     "nodemon": "^2.0.20",
     "qrcode": "^1.5.1",
     "socket.io": "^4.5.4",
     "validator": "^13.7.0",
-    "whatsapp-web.js": "^1.18.4",
+    "whatsapp-web.js": "^1.19.2",
     "wwebjs-mongo": "^1.1.0"
   }
 }
