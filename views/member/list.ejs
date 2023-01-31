@@ -1,94 +1,47 @@
-<div class="container d-flex justify-content-center flex-column">
-    <div class="card mb-3">
-        <div class="card-body d-flex justify-content-center">
-            <h2>List Id Member</h2>
-        </div>
-    </div>
-    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">
-        Create
-    </button>
-
-    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="createModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-content">
+                <div class="main-banner mb-5">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="header-text">
+                                <h4><em>List</em> Showroom Member JKT48</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <form id="createMember">
-                    <div class="modal-body">
-                        <div class="alert alert-danger d-none"></div>
-                        <label class="form-label">ID Showroom Member</label>
-                        <input type="text" name="id_member" class="form-control">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table text-white align-middle table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">room id</th>
+                                    <th scope="col">nama</th>
+                                    <th scope="col">action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% let number = 1; %>
+                                <% members.forEach(member => { %>
+                                <tr>
+                                    <th scope="row"><%= number %></th>
+                                    <td><%= member.info.room_id %></td>
+                                    <td><%= member.info.main_name %></td>
+                                    <td>
+                                        <form class=" d-inline" action="/member/<%= member._id %>?_method=delete" method="post">
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% number++ %>
+                                <% }) %>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-    <div class="card mb-3">
-        <div class="card-body">
-            <table class="table table-striped align-middle">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">room id</th>
-                        <th scope="col">nama</th>
-                        <th scope="col">action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% let number = 1; %>
-                    <% members.forEach(member => { %>
-                    <tr>
-                        <th scope="row"><%= number %></th>
-                        <td><%= member.info.room_id %></td>
-                        <td><%= member.info.main_name %></td>
-                        <td>
-                            <form action="/member/<%= member._id %>?_method=delete" method="post">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    <% number++ %>
-                    <% }) %>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>
-
-<script>
-    const createForm = document.getElementById("createMember");
-    const alert = document.querySelector(".alert");
-
-    createForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        try {
-            const result = await fetch("/member", {
-                method: "POST",
-                body: JSON.stringify({
-                    id: createForm.id_member.value
-                }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-
-            const data = await result.json();
-
-            if (data.message == "successful!") {
-                location.assign("/member/list");
-            } else {
-                alert.classList.remove("d-none");
-                alert.innerHTML = data.error.message;
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    })
-</script>

@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username" id="username" value="<%= user.username %> ">
+                </div>
+                <div class="mb-3">
+                    <label for="whatsapp" class="form-label">Nomor Whatsapp</label>
+                    <input type="text" class="form-control" name="whatsapp" id="whatsapp">
+                </div>
+                <button type="submit" class="btn btn-info">Simpan</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.querySelector("form");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        let whatsapp = "62" + form.whatsapp.value.slice(1) + "@c.us";
+
+        const result = await fetch("/user/<%= user._id %>", {
+            method: "PUT",
+            body: JSON.stringify({
+                id: "<%= user._id %>",
+                whatsapp
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const data = await result.json();
+
+        console.log(data)
+    });
+</script>

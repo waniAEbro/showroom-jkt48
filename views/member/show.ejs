@@ -1,25 +1,65 @@
 <div class="container">
-    <div class="row justify-content-center mb-3">
-        <div class="col-lg-6">
-            <div class="card">
-                <img src="<%= member.info.image %> " class="img-fluid rounded-start" alt="<%= "foto " + member.info.main_name %> ">
-                <div class="card-body">
-                    <h5 class="card-title"><%= member.info.main_name %> </h5>
-                    <p class="card-text" style="white-space: pre-wrap"><%- member.info.description.slice(1, -1) %> </p>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-content">
+                <div class="game-details">
+                    <div class="row">
+                        <div class="col-lg-12 text-center mb-3">
+                            <h3><%= member.info.main_name.split("/")[0] %> Details</h3>
+                            <p class="text-white"><%= member.info.main_name.split("/")[1] %></p>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="left-info">
+                                            <div class="left">
+                                                <h4>Follower</h4>
+                                                <span>Penonton Showroom</span>
+                                            </div>
+                                            <ul>
+                                                <li><% let follower = ""; %>
+                                                    <% String(member.info.follower_num).split("").reverse().forEach((cur, idx, arr) => { %>
+                                                    <% follower += ((idx + 1) % 3 == 0 && idx + 1 != arr.length) ? cur + "." : cur %>
+                                                    <% }) %>
+                                                    <%= follower.split("").reverse().join(""); %>
+                                                </li>
+                                                <li>
+                                                    <% let viewer = ""; %>
+                                                    <% String(member.info.view_num).split("").reverse().forEach((cur, idx, arr) => { %>
+                                                    <% viewer += ((idx + 1) % 3 == 0 && idx + 1 != arr.length) ? cur + "." : cur %>
+                                                    <% }) %>
+                                                    <%= viewer.split("").reverse().join(""); %>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="feature-banner header-text col-lg-6">
+                                        <img src="<%= member.info.image %>" alt="" style="border-radius: 23px; margin-bottom: 30px;">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <p style="white-space: pre-wrap"><%- member.info.description.slice(1, -1) %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ***** Details End ***** -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-content">
+                            <video-js class="ratio" autoplay="autoplay" id=example-video width=960 height=540 class="vjs-default-skin" controls>
+                                <source src="" type="application/x-mpegURL" id="video">
+                            </video-js>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row justify-content-center mb-3">
-        <div class="col-9">
-            <div class="card mb-3">
-                <video-js class="ratio" autoplay="autoplay" id=example-video width=960 height=540 class="vjs-default-skin" controls>
-                    <source src="" type="application/x-mpegURL" id="video">
-                </video-js>
-            </div>
-        </div>
-    </div>
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.0.0-1/video.js" integrity="sha512-o///l2FBgUXBQgnlufCyebrYBqMOtTgu+wWPGAZf3sxzDWzziM37ZlXEisAT1oRCn5Bk6UP+edFRPX38id4tlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/@videojs/http-streaming@3.0.0-2/dist/videojs-http-streaming.cjs.min.js"></script>
 <script>

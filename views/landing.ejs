@@ -1,0 +1,77 @@
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-content">
+
+                <!-- ***** Banner Start ***** -->
+                <div class="main-banner">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="header-text">
+                                <h6>Selamat Datang Di website waniAEbro</h6>
+                                <h4><em>Cari</em> Showroom Member JKT48 Disini</h4>
+                                <div class="main-button">
+                                    <a href="/member">Cari Sekarang</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ***** Banner End ***** -->
+
+                <!-- ***** Live Stream Start ***** -->
+                <div class="live-stream">
+                    <div class="col-lg-12">
+                        <div class="heading-section">
+                            <h4><em>Showroom</em> Member Terpopuler</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <% populars.forEach(member => { %>
+                        <div class="col-lg-6">
+                            <div class="item">
+                                <div class="thumb">
+                                    <img src="<%= member.info.image %>" alt="">
+                                    <div class="hover-effect">
+                                        <div class="content">
+                                            <div class="live">
+                                                <a href="/member/<%= member._id %> ">Lihat</a>
+                                            </div>
+                                            <ul>
+                                                <li><a href="#"><i class="fa fa-eye"></i> <%= member.info.view_num %> </a></li>
+                                                <li><a target="_blank" href="<%= member.info.share_url_live %> "></i>Showroom</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="down-content">
+                                    <div class="avatar">
+                                        <a href="/member/<%= member._id %>"><img src="<%= member.info.image_square %>" alt="" style="max-width: 46px; border-radius: 50%; float: left;"></a>
+                                    </div>
+                                    <a href="/member/<%= member._id %> ">
+                                        <span><i class="fa fa-check"></i> <%= member.info.main_name.split("/")[1] %></span>
+                                        <h4>
+                                            <%= member.info.main_name.split("/")[0] %>
+                                            <span>
+                                                <% if (member.info.is_onlive) { %>
+                                                <div class="badge bg-danger">Live</div>
+                                                <% } %>
+                                            </span>
+                                        </h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                        <div class="col-lg-12">
+                            <div class="main-button">
+                                <a href="/member">Lihat Member Lain</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ***** Live Stream End ***** -->
+            </div>
+        </div>
+    </div>
+</div>

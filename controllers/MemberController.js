@@ -4,16 +4,16 @@ const https = require("https");
 const index = (req, res) => {
     Member.find().then(members => {
         let lives = members.filter(member => member.info.is_onlive);
-        res.render("member/index", { layout: "layouts/main", title: "Home", members, lives });
+        res.render("member/index", { layout: "layouts/main", title: "Member", members, lives });
     }).catch(error => {
-        console.log(error);
+        res.render("404", { layout: "layouts/main", title: "404" });
     });
 };
 
 const show = (req, res) => {
     Member.findOne({ _id: req.params.id })
         .then(member => {
-            res.render("member/show", { layout: "layouts/main", title: "Detail", member });
+            res.render("member/show", { layout: "layouts/main", title: "Member", member });
         })
         .catch(error => {
             res.status(404).render("404", { layout: "layouts/main", title: "404" });
@@ -31,17 +31,17 @@ const getLive = (req, res) => {
             res.send(JSON.parse(respond));
         })
     }).on("error", error => {
-        console.log(error);
+        res.json(error);
     });
 };
 
 const list = (req, res) => {
     Member.find()
         .then(members => {
-            res.render("member/list", { layout: "layouts/main", title: "List", members })
+            res.render("member/list", { layout: "layouts/main", title: "Member", members })
         })
         .catch(error => {
-            console.log(error);
+            res.status(404).render("404", { layout: "layouts/main", title: "404" });
         });
 }
 
@@ -50,7 +50,9 @@ const destroy = (req, res) => {
         .then(() => {
             res.redirect("/member/list");
         })
-        .catch(error => { console.log(error) });
+        .catch(error => {
+            res.status(404).render("404", { layout: "layouts/main", title: "404" });
+        });
 }
 
 const store = (req, res) => {

@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-content">
+                <div class="main-banner mb-5">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="header-text">
+                                <h4><em>List</em> Users waniaebro</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table class="table align-middle text-white table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">nama</th>
+                                    <th scope="col">whatsapp</th>
+                                    <th scope="col">action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% let number = 1; %>
+                                <% users.forEach(user => { %>
+                                <tr>
+                                    <th scope="row"><%= number %></th>
+                                    <td><%= user.username %></td>
+                                    <% if (user.info && user.info.whatsapp) { %>
+                                    <td><%= user.info.whatsapp %> </td>
+                                    <% } else { %>
+                                    <td>belum ada nomor terdaftar</td>
+                                    <% } %>
+                                    <td><a href="/user/edit/<%= user._id %>" class="btn btn-warning">Edit</a></td>
+                                </tr>
+                                <% number++ %>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

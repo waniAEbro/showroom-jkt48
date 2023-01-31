@@ -1,22 +1,25 @@
-<nav class="navbar navbar-dark navbar-expand-lg bg-dark mb-4">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Showroom JKT48</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link <% if (title == "Home") { %>
-                    active
-                    <% } %>" aria-current="page" href="/">Home</a>
-                </li>
-            </ul>
-            <% if (user) { %>
-            <a href="/logout" class="btn btn-danger">Log Out</a>
-            <% } else { %>
-            <a href="/login" class="nav-link me-3">Login</a>
-            <% } %>
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="/" class="d-flex align-items-center logo">
+                        <h4 class="text-info">waniAEbro</h4>
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="/" class="<%= title == "Home" ? "active" : "" %>">Home</a></li>
+                        <li><a href="/member" class="<%= title == "Member" ? "active" : "" %>">Member</a></li>
+                        <li><a href="/user">Profile <img src="/assets/images/profile-header.jpg" alt=""></a></li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
         </div>
     </div>
-</nav>
+</header>

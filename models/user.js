@@ -1,24 +1,19 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
-    nama: {
-        type: String,
-        required: [true, "silakan masukkan nama"]
-    },
     password: {
         type: String,
         required: [true, "silakan masukkan password"],
         minlength: [6, "password harus lebih dari atau sama dengan 6 digit"]
     },
-    email: {
+    username: {
         type: String,
-        required: [true, "Silakan masukkan email"],
+        required: [true, "Silakan masukkan username"],
         unique: true,
         lowercase: true,
-        validate: [validator.isEmail, "silakan masukkan email yang valid"]
-    }
+    },
+    info: Object
 });
 
 userSchema.pre("save", async function (next) {
@@ -27,16 +22,16 @@ userSchema.pre("save", async function (next) {
     next();
 });
 
-userSchema.statics.login = async function (email, password) {
-    const user = await this.findOne({ email });
+userSchema.statics.login = async function (username, password) {
+    const user = await this.findOne({ username });
     if (user) {
         const auth = await bcrypt.compare(password, user.password);
         if (auth) {
             return user;
         }
-        throw Error("incorrect password or incorrect email!");
+        throw Error("incorrect password or incorrect username!");
     }
-    throw Error("incorrect password or incorrect email!");
+    throw Error("incorrect password or incorrect username!");
 };
 
 const User = mongoose.model("user", userSchema);

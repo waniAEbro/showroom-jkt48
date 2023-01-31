@@ -2,10 +2,12 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 const handleErrors = (err) => {
-    let errors = { email: "", password: "", nama: "" };
+    let errors = { username: "", password: "" };
+
+    console.log(err.message, err.code);
 
     if (err.code === 11000) {
-        errors.email = "email sudah pernah digunakan";
+        errors.username = "username sudah pernah digunakan";
     }
 
     if (err.message.includes("user validation failed")) {
@@ -27,9 +29,9 @@ const createToken = (id) => {
 }
 
 const storeSignUp = async (req, res) => {
-    const { nama, email, password } = req.body;
+    const { username, password } = req.body;
     try {
-        const user = await User.create({ nama, email, password });
+        const user = await User.create({ username, password });
         const token = createToken(user._id);
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.status(201).json({ user: user._id });
@@ -44,9 +46,9 @@ const showLogin = (req, res) => {
 }
 
 const checkLogin = async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     try {
-        const user = await User.login(email, password);
+        const user = await User.login(username, password);
         const token = createToken(user._id);
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
         res.status(200).json({ user: user._id });

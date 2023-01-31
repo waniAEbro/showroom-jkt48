@@ -3,14 +3,9 @@
         <div class="card-body">
             <form>
                 <div class="mb-3">
-                    <label class="form-label">Nama: </label>
-                    <input type="text" required name="nama" class="form-control mb-2">
-                    <div class="nama alert alert-danger d-none"></div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Email: </label>
-                    <input type="email" required name="email" class="form-control mb-2">
-                    <div class="email alert alert-danger d-none"></div>
+                    <label class="form-label">Username: </label>
+                    <input type="text" required name="username" class="form-control mb-2">
+                    <div class="username alert alert-danger d-none"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Password</label>
@@ -25,22 +20,19 @@
 
 <script>
     const form = document.querySelector("form");
-    const namaError = document.querySelector(".nama.alert");
-    const emailError = document.querySelector(".email.alert");
+    const usernameError = document.querySelector(".username.alert");
     const passwordError = document.querySelector(".password.alert");
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
-        const nama = form.nama.value;
-        const email = form.email.value;
+        const username = form.username.value;
         const password = form.password.value;
 
         try {
             const result = await fetch("/signup", {
                 method: "POST",
                 body: JSON.stringify({
-                    nama,
-                    email,
+                    username,
                     password
                 }),
                 headers: {
@@ -50,17 +42,11 @@
 
             const data = await result.json();
             if (data.errors) {
-                if (data.errors.nama) {
-                    namaError.classList.remove("d-none");
-                    namaError.innerHTML = data.errors.nama;
+                if (data.errors.username) {
+                    usernameError.classList.remove("d-none");
+                    usernameError.innerHTML = data.errors.username;
                 } else {
-                    namaError.classList.add("d-none");
-                }
-                if (data.errors.email) {
-                    emailError.classList.remove("d-none");
-                    emailError.innerHTML = data.errors.email;
-                } else {
-                    emailError.classList.add("d-none");
+                    usernameError.classList.add("d-none");
                 }
                 if (data.errors.password) {
                     passwordError.classList.remove("d-none");

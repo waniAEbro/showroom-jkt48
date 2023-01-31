@@ -12,6 +12,7 @@ const mongoose = require("mongoose");
 const { MongoStore } = require("wwebjs-mongo");
 const WhatsappRoutes = require("./routes/WhatsappRoutes.js");
 const AuthRoutes = require("./routes/AuthRoutes.js");
+const UserRoutes = require("./routes/UserRoutes.js");
 const requireAuth = require("./middleware/authMiddleware.js");
 
 mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
@@ -49,20 +50,22 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
                             }).catch(error => console.log(error));
 
                             if (!member.is_notified) {
-                                Whatsapp.find().then(whatsapps => {
-                                    whatsapps.forEach(whatsapp => {
-                                        client.sendMessage(whatsapp.nomor, `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton \n atau silakan kunjungi showroom-live berikut: ${member.info.share_url_live}`).then(() => {
-                                            Member.findByIdAndUpdate(member._id, {
-                                                is_notified: true
-                                            }).catch(error => console.log(error));
-                                        }).catch(error => console.log(error));
-                                    })
+                                User.find().then(users => {
+                                    users.filter(user => user.info && user.info.whatsapp).forEach(user => {
+                                        client.sendMessage(user.info.whatsapp, `Hai, ${member.info.main_name} sedang live! silakan kunjungi http://www.waniaebro.xyz/member/${member._id} untuk menonton \n atau silakan kunjungi showroom-live berikut: ${member.info.share_url_live}`).catch(error => console.log(error));
+                                    });
+                                    console.log("hello");
+                                    try {
+                                        Member.updateOne({ _id: member._id }, { is_notified: true, info: respond }).catch(error => console.log(error));
+                                    } catch (error) {
+                                        console.log(error);
+                                    }
                                 })
                             }
                         } else {
-                            Member.findByIdAndUpdate(member._id, {
+                            Member.updateOne({ _id: member._id }, {
                                 is_notified: false,
-                                "info.is_onlive": false,
+                                info: respond
                             }).catch(error => console.log(error))
                         }
                     })
@@ -81,22 +84,26 @@ mongoose.connect("mongodb://127.0.0.1:27017/showroom_jkt48").then(() => {
             })
         });
 
-        client.on("ready", () => {
-            socket.emit("status", "Whatsapp sudah terhubung");
-        })
-
         client.on("authenticated", () => {
             socket.emit("status", "whatsapp siap untuk digunakan");
-        })
+        });
+
+        client.on("remote_session_saved", () => {
+            socket.emit("status", "remote auth siap");
+        });
+
+        client.on("ready", () => {
+            socket.emit("status", "Whatsapp sudah terhubung");
+        });
     });
 
-    client.on("message", async message => {
-        message.reply("maaf, kami tidak bisa membalas pesan anda 🙏");
-    });
+    // client.on("message", async message => {
+    //     message.reply("maaf, kami tidak bisa membalas pesan anda 🙏");
+    // });
 });
 
 const Member = require("./models/member.js");
-const Whatsapp = require("./models/whatsapp.js");
+const User = require("./models/user.js");
 
 const app = express();
 const server = http.createServer(app);
@@ -113,11 +120,18 @@ app.use(cookieParser());
 
 app.get("*", requireAuth.checkUser);
 app.get("/", (req, res) => {
-    res.redirect("/member");
+    Member.find().then(members => {
+        let lives = members.filter(member => member.info.is_onlive);
+        let populars = members.sort((a, b) => b.info.follower_num - a.info.follower_num).slice(0, 8)
+        res.status(200).render("landing", { layout: "layouts/main", title: "Home", members, lives, populars });
+    }).catch(error => {
+        console.log(error);
+    });
 });
 app.use(AuthRoutes);
 app.use("/member", MemberRoutes);
 app.use("/whatsapp", requireAuth.requireAuth, WhatsappRoutes);
+app.use("/user", UserRoutes);
 app.use("/", (req, res) => {
     res.status(404).render("404", { layout: "layouts/main", title: "404" });
 });
